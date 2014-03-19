@@ -8,7 +8,7 @@
 
 dir=~/code/dotfiles                    # dotfiles directory
 olddir=~/code/dotfiles_old             # old dotfiles backup directory
-files="bashrc vimrc vim config/awesome Xresources zenburn muttrc Xsession"    # list of files/folders to symlink in homedir
+files="bashrc vimrc vim config/awesome Xresources zenburn.xrdb muttrc Xsession"    # list of files/folders to symlink in homedir
 
 ##########
 
@@ -27,7 +27,7 @@ for file in $files; do
     echo "Moving any existing dotfiles from ~ to $olddir"
     mv ~/.$file $olddir
     echo "Creating symlink to $file in home directory."
-    ln -s $dir/$file ~/.$file
+    ln -s $dir/.$file ~/.$file
 done
 
 install_zsh () {
