@@ -1,0 +1,1 @@
+/home/eric/.config/awesome/calendar2.lua
