@@ -343,7 +343,14 @@ globalkeys = awful.util.table.join(
 
     -- Prompt
     awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
-
+	awful.key({ modkey, "Shift" }, "r",
+          function ()
+              awful.prompt.run({ prompt = "Run in terminal: " },
+                  mypromptbox[mouse.screen].widget,
+                  function (...) awful.util.spawn("bash -ic " .. ...) end,
+                  awful.completion.shell,
+                  awful.util.getdir("cache") .. "/history")
+          end),
     awful.key({ modkey }, "x",
               function ()
                   awful.prompt.run({ prompt = "Run Lua code: " },
