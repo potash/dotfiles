@@ -273,7 +273,8 @@ root.buttons(awful.util.table.join(
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
 	awful.key({ }, "XF86Launch1", function () run_or_raise("xterm -name console", {instance="console"}) end),
-	awful.key({ }, "Print", function () awful.util.spawn('import -window ' .. client.focus.window .. ' screenshot.png') end),
+	awful.key({ }, "Print", function () awful.util.spawn('import -window ' .. client.focus.window .. ' ' .. home .. '/docs/screenshots/' .. os.time() .. '.png') end),
+	awful.key({ "Alt"}, "Print", function () awful.util.spawn('import '  .. home .. '/docs/screenshots/' .. os.time() .. '.png') end),
 	awful.key({ }, "XF86AudioRaiseVolume",  APW.Up),
     awful.key({ }, "XF86AudioLowerVolume",  APW.Down),
 	awful.key({ }, "XF86AudioMute",         APW.ToggleMute),
