@@ -65,6 +65,6 @@ macro index,pager $ "<sync-mailbox><enter><shell-escape>echo \"vicious.force({ma
 
 # save sent in inbox for threading
 folder-hook . 'set record="^"'
-
+unset fcc_attach
 
 source ~/.mutt/crypto
