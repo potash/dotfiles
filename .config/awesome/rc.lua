@@ -161,7 +161,7 @@ end
 
 
 mymainmenu = awful.menu({ items = { 
-	{ "&mutt", function() run_or_raise(terminal .. " -name mutt -e mutt", {instance="mutt", class="XTerm"}, 1)  end },
+	{ "&mutt", function() run_or_raise(terminal .. " -name mutt -e mutt", {instance="mutt"}, 1)  end },
 	{ "&sonata", function() run_or_raise("sonata", {class="Sonata"}, 1) end },
 	{ "&rc.lua", function() run_or_raise("gvim .config/awesome/rc.lua", {name = "rc.lua"}, 1) end },
 	{ "&firefox",  function() run_or_raise("iceweasel", {class = "Iceweasel"}) end },

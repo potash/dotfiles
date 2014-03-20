@@ -9,7 +9,6 @@
   
    This file is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2, or (at
    your option) any later version.
   
    This file is distributed in the hope that it will be useful,
@@ -171,8 +170,9 @@ URxvt.scrollstyle: plain
 URxvt.perl-ext-common: default,matcher
 URxvt.url-launcher: /usr/bin/iceweasel
 URxvt.matcher.button: 1
+URxvt.cutchars:        '"'+()*<>[]{|}
 URxvt.colorUL: #4682B4
 
 URxvt.font:     xft:DejavuSansMono:pixelsize=12
-URxvt.urgentOnBell: true
+URxvt.urgentOnBell: false
 URxvt.visualBell: true
