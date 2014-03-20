@@ -56,6 +56,8 @@ macro index .n  "<change-folder> = mail/News<enter>"  "go to News folder"
 macro index .m  "<change-folder> = mail/INBOX<enter>"  "go to INBOX folder"
 macro index .f  "<change-folder> = mail/Sent<enter>"  "go to Sent folder"
 bind index q noop # unbind q quit keybinding, use ^c instead
+macro pager Q "<exit>" "exit pager"
+macro pager q "<exit><Esc>v" "exit pager and collapse thread"
 
 macro index,pager $ "<sync-mailbox><enter><shell-escape>echo \"vicious.force({mailwidget})\" | awesome-client<enter>" "save maildir" 
 
