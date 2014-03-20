@@ -88,7 +88,8 @@ end
 -- }}}
 
 --- Spawns cmd if no client can be found matching properties
--- If such a client can be found, pop to first tag where it is visible, and give it focus
+-- If one such client is found, toggle its visibility
+-- If multiple found, cycle between them
 -- @param cmd the command to execute
 -- @param properties a table of properties to match against clients.  Possible entries: any properties of the client object
 function run_or_raise(cmd, properties, scr)
