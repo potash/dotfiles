@@ -465,7 +465,6 @@ awful.rules.rules = {
 		awful.client.movetoscreen(c,s)
 		c.hidden = false
 		c:raise()
-		notify(c.screen)
 	  end},
     { rule = { instance = "org", class = "Gvim" },
       properties = modal_properties },
