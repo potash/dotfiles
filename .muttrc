@@ -67,4 +67,7 @@ macro index,pager $ "<sync-mailbox><enter><shell-escape>echo \"vicious.force({ma
 folder-hook . 'set record="^"'
 unset fcc_attach
 
+set markers=no	# do not wrap multiline urls
+set smart_wrap	# do not wrap midword
+
 source ~/.mutt/crypto

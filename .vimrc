@@ -96,3 +96,6 @@ endfunction
 set nocompatible
 let g:vimwiki_hl_headers=1
 let g:vimwiki_folding='list'
+
+" mutt
+autocmd FileType mail set spell

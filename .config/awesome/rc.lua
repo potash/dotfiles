@@ -24,7 +24,7 @@ end
 local home 	 	= os.getenv("HOME")
 
 function notify(s)
-  	naughty.notify({text = tostring(s)})
+  	naughty.notify({text = tostring(s), screen = mouse.screen})
 end
 
 -- Handle runtime errors after startup
@@ -49,7 +49,7 @@ beautiful.init(home .. "/.config/awesome/zenburn.lua")
 naughty.config.default_preset.bg = beautiful.bg_normal
 
 -- This is used later as the default terminal and editor to run.
-terminal = "xterm"
+local terminal = "urxvt"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -161,11 +161,11 @@ end
 
 
 mymainmenu = awful.menu({ items = { 
-	{ "&mutt", function() run_or_raise("xterm -name mutt -e mutt", {instance="mutt", class="XTerm"}, 1)  end },
+	{ "&mutt", function() run_or_raise(terminal .. " -name mutt -e mutt", {instance="mutt", class="XTerm"}, 1)  end },
 	{ "&sonata", function() run_or_raise("sonata", {class="Sonata"}, 1) end },
 	{ "&rc.lua", function() run_or_raise("gvim .config/awesome/rc.lua", {name = "rc.lua"}, 1) end },
 	{ "&firefox",  function() run_or_raise("iceweasel", {class = "Iceweasel"}) end },
-	{ "&org", function () run_or_raise("gvim -c \"set tw=0 | set fo=cq | set wm=0\" -name org -p docs/org/todo.org docs/org/log.org", {instance="org"}, 1) end  }
+	{ "&org", function () run_or_raise("gvim -name org -p docs/org/todo.org docs/org/log.org", {instance="org"}, 1) end  }
 }})
 
 mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
@@ -273,7 +273,7 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-	awful.key({ }, "XF86Launch1", function () run_or_raise("xterm -name console", {instance="console"}) end),
+	awful.key({ }, "XF86Launch1", function () run_or_raise(terminal .. " -name console", {instance="console"}) end),
 	awful.key({ }, "Print", function () awful.util.spawn('import -window ' .. client.focus.window .. ' ' .. home .. '/docs/screenshots/' .. os.time() .. '.png') end),
 	awful.key({ "Alt"}, "Print", function () awful.util.spawn('import '  .. home .. '/docs/screenshots/' .. os.time() .. '.png') end),
 	awful.key({ }, "XF86AudioRaiseVolume",  APW.Up),
@@ -371,6 +371,7 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
     awful.key({ modkey,           }, "s",      function (c) c.sticky = not c.sticky            end),
+    awful.key({ modkey,  "Shift"         }, "u",      function (c) c.urgent = not c.urgent            end),
     awful.key({ modkey,           }, "n",
         function (c)
             -- The client currently has the input focus, so it cannot be
@@ -452,13 +453,13 @@ awful.rules.rules = {
      properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
-    { rule = { instance = "Navigator" },
-      properties = { floating = false } },
-    { rule = { instance = "mutt", class = "XTerm" },
+    --{ rule = { instance = "Navigator" },
+    --  properties = { floating = false } },
+    { rule = { instance = "mutt" },
       properties = modal_properties },
     { rule = { class = "Sonata" },
       properties = modal_properties },
-    { rule = { instance = "console", class = "XTerm" },
+    { rule = { instance = "console" },
       properties = modal_properties, 
 	  callback = function(c) 
 		s = c.screen
@@ -496,6 +497,12 @@ client.add_signal("manage", function (c, startup)
         end
     end)
 
+	c:add_signal("property::urgent", function(c)
+		if c.urgent then
+		end
+	end)
+
+
     if not startup then
         -- Set the windows at the slave,
         -- i.e. put it at the end of others instead of setting it master.
@@ -509,8 +516,10 @@ client.add_signal("manage", function (c, startup)
     end
 end)
 
+
 client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+
 -- }}}
 
 mystatebar = awful.wibox( {position = "bottom", fg = beautiful.fg_normal, bg = beautiful.bg_normal, screen=1} )
