@@ -175,3 +175,4 @@ URxvt.colorUL: #4682B4
 
 URxvt.font:     xft:DejavuSansMono:pixelsize=12
 URxvt.urgentOnBell: true
+URxvt.visualBell: true

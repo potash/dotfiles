@@ -478,7 +478,6 @@ awful.rules.rules = {
 	  end},
     { rule = { instance = "org", class = "Gvim" },
       properties = modal_properties },
-
 }
 
 -- }}}
@@ -496,12 +495,6 @@ client.add_signal("manage", function (c, startup)
             client.focus = c
         end
     end)
-
-	c:add_signal("property::urgent", function(c)
-		if c.urgent then
-		end
-	end)
-
 
     if not startup then
         -- Set the windows at the slave,
