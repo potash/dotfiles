@@ -8,15 +8,8 @@ require("beautiful")
 require("naughty")
 require("vicious")
 
--- Load Debian menu entries
-require("debian.menu")
-
--- Calendar
 local calendar2 = require("calendar2")
--- PulseAudio volume
 local APW = require("apw/widget")
--- clientdb for saving window state between restart
-awful.clientdb = require("awful.clientdb")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -26,6 +19,9 @@ if awesome.startup_errors then
                      title = "Oops, there were errors during startup!",
                      text = awesome.startup_errors })
 end
+
+
+local home 	 	= os.getenv("HOME")
 
 function notify(s)
   	naughty.notify({text = tostring(s)})
@@ -48,8 +44,9 @@ end
 -- }}}
 
 -- {{{ Variable definitions
-
-beautiful.init("/home/eric/.config/awesome/zenburn.lua")
+-- Themes define colours, icons, and wallpapers
+beautiful.init(home .. "/.config/awesome/zenburn.lua")
+naughty.config.default_preset.bg = beautiful.bg_normal
 
 -- This is used later as the default terminal and editor to run.
 terminal = "xterm"
@@ -67,16 +64,16 @@ modkey = "Mod4"
 layouts =
 {
     --awful.layout.suit.floating,
-    awful.layout.suit.max,
-    awful.layout.suit.tile.right,
+    --awful.layout.suit.tile,
     awful.layout.suit.tile.left,
+    awful.layout.suit.max,
     awful.layout.suit.tile.bottom,
     awful.layout.suit.tile.top,
     --awful.layout.suit.fair,
     --awful.layout.suit.fair.horizontal,
     --awful.layout.suit.spiral,
     --awful.layout.suit.spiral.dwindle,
-    --awful.layout.suit.max.fullscreen,
+    awful.layout.suit.max.fullscreen,
     --awful.layout.suit.magnifier
 }
 -- }}}
@@ -89,25 +86,6 @@ for s = 1, screen.count() do
     tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
 end
 -- }}}
-
--- {{{ Menu
--- Create a laucher widget and a main menu
-awful.menu.menu_keys = { up    = { "k", "Up" },
-                         down  = { "j", "Down" },
-                         exec  = { "l", "Return", "Right" },
-                         enter = { "Right" },
-                         back  = { "h", "Left" },
-                         close = { "q", "Escape" },
-                       }
-
-
-
-myawesomemenu = {
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
-   { "restart", awesome.restart },
-   { "quit", awesome.quit }
-}
 
 --- Spawns cmd if no client can be found matching properties
 -- If such a client can be found, pop to first tag where it is visible, and give it focus
@@ -181,17 +159,13 @@ function match (table1, table2)
 end
 
 
-mymainmenu = awful.menu({ items = { --{ "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    --{ "Debian", debian.menu.Debian_menu.Debian },
-                                    --{ "open terminal", terminal },
-									{ "&mutt", function() run_or_raise("xterm -name mutt -e mutt", {instance="mutt", class="XTerm"}, 1)  end },
-									{ "&sonata", function() run_or_raise("sonata", {class="Sonata"}, 1) end },
-									{ "&rc.lua", function() run_or_raise("gvim .config/awesome/rc.lua", {name = "rc.lua"}, 1) end },
-									{ "&firefox",  function() run_or_raise("iceweasel", {class = "Iceweasel"}) end },
-                                    { "&org", function () run_or_raise("gvim -c \"set tw=0 | set fo=cq | set wm=0\" -name org -p docs/org/todo.org docs/org/log.org", 
-									  {instance="org"}, 1) end  }
-                                  }
-                        })
+mymainmenu = awful.menu({ items = { 
+	{ "&mutt", function() run_or_raise("xterm -name mutt -e mutt", {instance="mutt", class="XTerm"}, 1)  end },
+	{ "&sonata", function() run_or_raise("sonata", {class="Sonata"}, 1) end },
+	{ "&rc.lua", function() run_or_raise("gvim .config/awesome/rc.lua", {name = "rc.lua"}, 1) end },
+	{ "&firefox",  function() run_or_raise("iceweasel", {class = "Iceweasel"}) end },
+	{ "&org", function () run_or_raise("gvim -c \"set tw=0 | set fo=cq | set wm=0\" -name org -p docs/org/todo.org docs/org/log.org", {instance="org"}, 1) end  }
+}})
 
 mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mymainmenu })
@@ -201,8 +175,6 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 -- Create a textclock widget
 mytextclock = awful.widget.textclock({ align = "right" })
 calendar2.addCalendarToWidget(mytextclock, "<span color='yellow'>%s</span>")
-
--- cal.register(mytextclock)
 
 -- Create a systray
 mysystray = widget({ type = "systray" })
@@ -226,7 +198,7 @@ mytasklist.buttons = awful.util.table.join(
                                               if c == client.focus then
                                                   c.minimized = true
                                               else
-                                                  if not c:isvisible() and c:tags()[1] then
+                                                  if not c:isvisible() then
                                                       awful.tag.viewonly(c:tags()[1])
                                                   end
                                                   -- This will also un-minimize
@@ -300,16 +272,12 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-	awful.key({ modkey, "Shift"    }, "Right",     function () awful.tag.incmwfact( 0.01)    end),
-	awful.key({ modkey, "Shift"    }, "Left",     function () awful.tag.incmwfact(-0.01)    end),
-	awful.key({ modkey, "Shift"    }, "Down",     function () awful.client.incwfact( 0.01)    end),
-	awful.key({ modkey, "Shift"    }, "Up",     function () awful.client.incwfact(-0.01)    end),
-    awful.key({ modkey, "Shift" }, "w", function(c) awful.clientdb.save(c) end),
 	awful.key({ }, "XF86Launch1", function () run_or_raise("xterm -name console", {instance="console"}) end),
 	awful.key({ }, "Print", function () awful.util.spawn('import -window ' .. client.focus.window .. ' screenshot.png') end),
 	awful.key({ }, "XF86AudioRaiseVolume",  APW.Up),
     awful.key({ }, "XF86AudioLowerVolume",  APW.Down),
-    awful.key({ }, "XF86AudioMute",         APW.ToggleMute),
+	awful.key({ }, "XF86AudioMute",         APW.ToggleMute),
+	awful.key({ modkey, "Control" }, "Shift_R", function () kbdcfg.switch() end),
 	awful.key({ modkey, "Shift" }, "F7", function ()
         if screen.count() == 2 then
             awful.util.spawn('xrandr --output VGA1 --off')
@@ -317,34 +285,16 @@ globalkeys = awful.util.table.join(
             awful.util.spawn('xrandr --output VGA1 --mode 1440x900 --right-of LVDS1')
         end
     end),
-    awful.key({ modkey, "Shift"   }, "o", function ()
-            -- Swap clients on the two screens by hiding, moving, moving, unhiding
-            s = mouse.screen;
-            cs = awful.client.visible(s);
-            cs2 = awful.client.visible((s%2)+1);
-            for a,b in pairs(cs) do
-                b.hidden = true
-                awful.client.movetoscreen(b,s+1)
-            end
-
-            for a,b in pairs(cs2) do
-                awful.client.movetoscreen(b,s)
-            end
-
-            for a,b in pairs(cs) do
-                b.hidden = false
-            end
-        end),
-    awful.key({ modkey            }, "F11", function ()
-        awful.prompt.run({ prompt = "Calculate: " }, mypromptbox[mouse.screen].widget,
+	awful.key({ modkey            }, "F11", function ()
+        awful.prompt.run({ prompt = "Calculate: " }, 
+			mypromptbox[mouse.screen].widget,
             function (expr)
                 local result = awful.util.eval("return (" .. expr .. ")")
                 naughty.notify({ text = expr .. " = " .. result, timeout = 10 })
             end
         )
     end),
-	awful.key({ modkey }, "b", function ()
-                      mystatebar.visible = not mystatebar.visible end),
+	awful.key({ modkey }, "b", function () mystatebar.visible = not mystatebar.visible end),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
@@ -390,23 +340,15 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
     awful.key({ modkey, "Control" }, "n", awful.client.restore),
-	-- Alt + Right Shift switches the current keyboard layout
-	awful.key({ modkey }, "Shift_R", function () kbdcfg.switch() end),
-	-- Prompt
+
+    -- Prompt
     awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
-	awful.key({ modkey, "Shift"   }, "r",
-          function ()
-              awful.prompt.run({ prompt = "Run in terminal: " },
-                  mypromptbox[mouse.screen].widget,
-                  function (...) awful.util.spawn("bash -ic " .. ...) end,
-                  awful.completion.shell,
-                  awful.util.getdir("cache") .. "/history")
-          end),
+
     awful.key({ modkey }, "x",
               function ()
                   awful.prompt.run({ prompt = "Run Lua code: " },
                   mypromptbox[mouse.screen].widget,
-                  windowawful.util.eval, nil,
+                  awful.util.eval, nil,
                   awful.util.getdir("cache") .. "/history_eval")
               end)
 )
@@ -481,9 +423,9 @@ clientbuttons = awful.util.table.join(
 root.keys(globalkeys)
 -- }}}
 
-local modal_properties = { ontop = true, above = true, sticky = true, floating = true, skip_taskbar = true, hidden=true };
-
 -- {{{ Rules
+local modal_properties = { ontop = true, above = true, sticky = true, floating = true, skip_taskbar = true };
+
 awful.rules.rules = {
     -- All clients will match this rule.
     { rule = { },
@@ -528,7 +470,8 @@ awful.rules.rules = {
     { rule = { instance = "org", class = "Gvim" },
       properties = modal_properties },
 
-},
+}
+
 -- }}}
 
 -- {{{ Signals
@@ -562,17 +505,13 @@ client.add_signal("focus", function(c) c.border_color = beautiful.border_focus e
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
--- awful.clientdb.load(awful.rules.rules, tags)
-
 mystatebar = awful.wibox( {position = "bottom", fg = beautiful.fg_normal, bg = beautiful.bg_normal, screen=1} )
 
 local spacer    = widget({ type = "textbox" })
 local separator = widget({ type = "textbox" })
 spacer.text     = " "
 separator.text  = "|"
-
-local icondir 	= "/home/eric/.config/awesome/icons/"
-local home 	 	= os.getenv("HOME")
+local icondir 	= home .. "/.config/awesome/icons/"
 
 uptimewidget = widget({ type = 'textbox' })
 vicious.register(uptimewidget, vicious.widgets.uptime,
@@ -638,7 +577,7 @@ vicious.register(netwidget, vicious.widgets.net,
                 return string.format('%-3g %3g', down, up)
         end, 3)
 
-     kbdcfg = {}
+    kbdcfg = {}
     kbdcfg.cmd = "setxkbmap"
     kbdcfg.layout = { { "us", "" }, { "ru", "phonetic" } }
     kbdcfg.current = 1  -- us is our default layout
@@ -688,4 +627,3 @@ mystatebar.widgets = {
     layout = awful.widget.layout.horizontal.leftright
 }
 
-naughty.config.default_preset.bg = '#7F9F7F'
