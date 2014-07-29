@@ -119,3 +119,5 @@ alias chromium='chromium --incognito'
 export PATH=$PATH:$HOME/bin # user binaries
 
 export PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+source ~/.rvm/scripts/rvm

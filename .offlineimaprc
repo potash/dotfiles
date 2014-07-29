@@ -4,6 +4,7 @@
 [general]
 pythonfile = ~/.offlineimap.py
 accounts = k2co3
+socktimeout = 120
 
 [Account k2co3]
 localrepository = Local
