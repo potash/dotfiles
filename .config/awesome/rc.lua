@@ -11,9 +11,9 @@ local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
-local calendar2 = require("calendar2")
 local vicious = require("vicious")
 local APW = require("apw/widget")
+local cal = require("utils/cal")
 
 -- Load Debian menu entries
 require("debian.menu")
@@ -178,7 +178,7 @@ function launcher(cmd, props, scr)
 end
 
 mymainmenu = awful.menu({ items = { 
-	{ "&mutt", launcher(terminal .. " -name mutt -e mutt",{instance="mutt"}, 1)  },
+	{ "&mutt", launcher(terminal .. " -cd /home/eric/www/ -name mutt -e mutt",{instance="mutt"}, 1)  },
 	{ "offline&imap", launcher(terminal .. " -name offlineimap -e offlineimap", {instance="offlineimap"}, 1) },
 	{ "&sonata", launcher("sonata", {class="Sonata"}) },
 	{ "&configs", launcher("gvim -name configs -p .config/awesome/rc.lua .Xresources .muttrc", {instance = "configs"}, 1) },
@@ -196,7 +196,8 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock()
-calendar2.addCalendarToWidget(mytextclock, "<span color='yellow'>%s</span>")
+--calendar2.addCalendarToWidget(mytextclock, "<span color='yellow'>%s</span>")
+cal.register(mytextclock)
 
 
 -- Create a wibox for each screen and add it
@@ -308,6 +309,18 @@ globalkeys = awful.util.table.join(
             end
         )
     end),
+	awful.key({ modkey, "Shift" }, "F7", function ()
+        if screen.count() == 2 then
+			awful.util.spawn('xrandr --output VGA1 --off')
+        else 
+            awful.util.spawn('xrandr --output VGA1 --mode 1440x900 --right-of LVDS1')
+        end
+    end),
+	awful.key({ modkey }, "b", function () mystatebar.visible = not mystatebar.visible end),
+	awful.key({ }, "XF86AudioRaiseVolume",  APW.Up),
+    awful.key({ }, "XF86AudioLowerVolume",  APW.Down),
+	awful.key({ }, "XF86AudioMute",         APW.ToggleMute),
+
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),

@@ -9,7 +9,6 @@
 -- {{{ Main
 theme = {}
 theme.wallpaper_cmd = {"xsetroot -solid black"}
--- theme.wallpaper_cmd = { "awsetbg /usr/share/awesome/themes/zenburn/zenburn-background.png" }
 -- }}}
 
 -- {{{ Styles
@@ -45,7 +44,7 @@ theme.titlebar_bg_normal = "#3F3F3F"
 -- Example:
 --theme.taglist_bg_focus = "#CC9393"
 -- }}}
-
+theme.tooltip_bg_color = "#3F3F3F"
 -- {{{ Widgets
 -- You can add as many variables as
 -- you wish and access them by using
