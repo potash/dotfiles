@@ -167,8 +167,8 @@ URxvt*color15:     #ffffff
 URxvt.scrollstyle: plain
 
 ! clickable URLs
-URxvt.perl-ext: default,mark-urls,matcher
-Urxvt.perl-ext-common: default,tabbed,mark-urls,matcher
+URxvt.perl-ext: default,mark-urls,matcher,font-size
+Urxvt.perl-ext-common: default,tabbed,mark-urls,matcher,font-size
 URxvt.url-launcher: /usr/bin/iceweasel
 URxvt.matcher.button: 1
 URxvt.cutchars:        ()*<>[]{|}
@@ -177,3 +177,8 @@ URxvt.colorUL: #4682B4
 URxvt.font:     xft:DejavuSansMono:pixelsize=12
 URxvt.urgentOnBell: false
 URxvt.visualBell: true
+
+URxvt.keysym.C-Up:     perl:font-size:increase
+URxvt.keysym.C-Down:   perl:font-size:decrease
+URxvt.keysym.C-S-Up:   perl:font-size:incglobal
+URxvt.keysym.C-S-Down: perl:font-size:decglobal

@@ -309,6 +309,10 @@ globalkeys = awful.util.table.join(
             end
         )
     end),
+	awful.key({ }, "Print", function () awful.util.spawn('import ' .. home .. '/docs/screenshots/' .. os.time() .. '.png') end),
+	awful.key({ modkey            }, "F3", function ()
+		awful.util.spawn('xset dpms force off')
+    end),
 	awful.key({ modkey, "Shift" }, "F7", function ()
         if screen.count() == 2 then
 			awful.util.spawn('xrandr --output VGA1 --off')
@@ -660,10 +664,10 @@ local netwidget = wibox.widget.textbox()
 -- Register ethernet widget
 vicious.register(netwidget, vicious.widgets.net,
         function (widget, args)
-                up = --args['{eth0 up_kb}'] + 
-				      args['{wlan0 up_kb}']
-                down = --args['{eth0 down_kb}'] + 
-				      args['{wlan0 down_kb}']
+                up = args['{eth0 up_kb}'] + 
+				     args['{wlan0 up_kb}']
+                down = args['{eth0 down_kb}'] + 
+				       args['{wlan0 down_kb}']
                 --return string.format('%-3g %3g', args['{eth0 down_kb}'], args['{eth0 up_kb}']) 
                 return string.format('%-3g %3g', down, up)
         end, 3)

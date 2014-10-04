@@ -3,7 +3,12 @@ set folder      = ~/mail
 set spoolfile   ="+INBOX"
 set header_cache=~/.cache/mutt
 set postponed	=~/mail/postponed
-source ~/.mutt/mailboxes
+#source ~/.mutt/mailboxes
+
+mailboxes =INBOX =Spam =News
+bind index,pager <down>   sidebar-next
+bind index,pager <up>     sidebar-prev
+bind index,pager <right>  sidebar-open
  
 # mark duplicates for deletion
 folder-hook . push "<delete-pattern>~=<enter>"
@@ -12,16 +17,19 @@ folder-hook . "exec collapse-all"
 # narrow tree
 set narrow_tree=yes
 
-source "gpg -dq /home/eric/.passwd/muttrc.gpg |"
 
 #set spoolfile = imaps://eric@k2co3.net@imap.zoho.com:993/INBOX
 
 set realname="Eric Potash"
 set from="eric@k2co3.net"
-alternates "(eric|all|grads)@math.northwestern.edu|eric@k2co3.net"
+alternates "(eric|all|grads)@math.northwestern.edu|eric@k2co3.net|eric.potash@gmail.com"
 set reverse_name=yes
 set use_from=yes
+
+source "gpg -dq /home/eric/.passwd/muttrc.gpg |"
 set smtp_url=smtps://eric@k2co3.net@smtp.zoho.com:465
+
+#set smtp_url=smtps://epotash@uchicago.edu@smtp.gmail.com:465
 
 set pager_index_lines="15" 
 set date_format="%y-%m-%d %T"
