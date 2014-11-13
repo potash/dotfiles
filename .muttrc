@@ -23,7 +23,7 @@ set narrow_tree=yes
 set realname="Eric Potash"
 set from="eric@k2co3.net"
 alternates "(eric|all|grads)@math.northwestern.edu|eric@k2co3.net|eric.potash@gmail.com"
-set reverse_name=yes
+#set reverse_name=yes
 set use_from=yes
 
 source "gpg -dq /home/eric/.passwd/muttrc.gpg |"
