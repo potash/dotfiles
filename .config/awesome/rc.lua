@@ -53,7 +53,7 @@ local home      = os.getenv("HOME")
 beautiful.init(home .. "/.config/awesome/zenburn.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "urxvt"
+terminal = "xterm"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -112,27 +112,27 @@ myawesomemenu = {
 -- @param cmd the command to execute
 -- @param properties a table of properties to match against clients.  Possible entries: any properties of the client object
 function run_or_raise(cmd, properties, scr)
-   local scr = scr or mouse.screen
-   local clients = client.get(scr)
-   local focused = awful.client.next(0)
-   local findex = 0
-   local matched_clients = {}
-   local n = 0
-   
-   local s = scr
+	local scr = scr or mouse.screen
+	local clients = client.get(scr)
+	local focused = awful.client.next(0)
+	local findex = 0
+	local matched_clients = {}
+	local n = 0
 
-     for i, c in pairs(client.get(s)) do
-      --make an array of matched clients
-       if match(properties, c) then
-          n = n + 1
-          matched_clients[n] = c
-          if c == focused then
-             findex = n
-          end
-       end
-     end
+	local s = scr
 
-   if n > 0 then
+    for i, c in pairs(client.get(s)) do
+	   --make an array of matched clients
+	   if match(properties, c) then
+		  n = n + 1
+		  matched_clients[n] = c
+		  if c == focused then
+			 findex = n
+		  end
+	   end
+	end
+
+   	if n > 0 then
       local c = matched_clients[1]
       -- if the focused window matched switch focus to next in list
       if 0 < findex and findex < n then
@@ -311,15 +311,39 @@ globalkeys = awful.util.table.join(
     end),
 	awful.key({ }, "Print", function () awful.util.spawn('import ' .. home .. '/docs/screenshots/' .. os.time() .. '.png') end),
 	awful.key({ modkey            }, "F3", function ()
-		awful.util.spawn('xset dpms force off')
+		awful.util.spawn("/bin/sh -c 'xset dpms force off && sleep 2 & slock'")
     end),
 	awful.key({ modkey, "Shift" }, "F7", function ()
         if screen.count() == 2 then
 			awful.util.spawn('xrandr --output VGA1 --off')
         else 
-            awful.util.spawn('xrandr --output VGA1 --mode 1440x900 --right-of LVDS1')
+            awful.util.spawn('xrandr --output VGA1 --mode 1440x900 --above LVDS1')
         end
     end),
+	awful.key({ modkey, "" }, "F8", function ()
+		awful.util.spawn('xbacklight -dec 10%')
+    end),
+	awful.key({ modkey, "" }, "F9", function ()
+		awful.util.spawn('xbacklight -inc 10%')
+    end),
+	awful.key({ modkey, "Shift" }, "r",
+              function ()
+                 awful.prompt.run({ prompt = "New tag name: " },
+                                  mypromptbox[mouse.screen].widget,
+                                  function(new_name)
+                                     local screen = mouse.screen
+                                     local tag = awful.tag.selected(screen)
+                                     if tag then
+									 	local idx = tostring(awful.tag.getidx(tag))
+                                        if not new_name or #new_name == 0 then
+                                           new_name=idx
+                                        else
+                                           new_name = tostring(idx) .. ':' .. new_name
+                                        end
+										tag.name = new_name
+                                     end
+                                  end)
+              end),
 	awful.key({ modkey }, "b", function () mystatebar.visible = not mystatebar.visible end),
 	awful.key({ }, "XF86AudioRaiseVolume",  APW.Up),
     awful.key({ }, "XF86AudioLowerVolume",  APW.Down),
@@ -474,12 +498,16 @@ awful.rules.rules = {
      properties = { floating = true } },
     { rule = { class = "feh" },
      properties = { floating = true } },
+    { rule = { class = "Display" },
+     properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
     { rule = { instance = "Navigator" },
       properties = { floating = false } },
 	{rule = {class = "Thunar", name = "File Operation Progress"},
-	  properties = { floating = true, screen=screen.count()} },
+	  properties = { floating = true} },
+	{rule = {class = "Askpass.tcl"},
+	  properties = { floating = true, ontop = true} },
 	{rule = {class = "Java", name = "Eclipse"},
 	  properties = { floating = true, screen=screen.count()} },
     { rule = { instance = "mutt" },
@@ -498,7 +526,7 @@ awful.rules.rules = {
 		c:geometry({
 		  	x = 0,
 		  	y = screengeom.height + screengeom.y - height,
-			width = screengeom.width,
+			width = screengeom.width -1,
 			height = height,
 	  	})
 		awful.client.movetoscreen(c,s)
