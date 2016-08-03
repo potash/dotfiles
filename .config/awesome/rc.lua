@@ -313,6 +313,9 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey            }, "F3", function ()
 		awful.util.spawn("/bin/sh -c 'xset dpms force off && sleep 2 & slock'")
     end),
+	awful.key({ modkey            }, "F4", function ()
+		awful.util.spawn("/bin/sh -c 'slock && pm-suspend'")
+    end),
 	awful.key({ modkey, "Shift" }, "F7", function ()
         if screen.count() == 2 then
 			awful.util.spawn('xrandr --output VGA1 --off')
@@ -321,10 +324,10 @@ globalkeys = awful.util.table.join(
         end
     end),
 	awful.key({ modkey, "" }, "F8", function ()
-		awful.util.spawn('xbacklight -dec 10%')
+		awful.util.spawn('xbacklight -time 0 -dec 10%')
     end),
 	awful.key({ modkey, "" }, "F9", function ()
-		awful.util.spawn('xbacklight -inc 10%')
+		awful.util.spawn('xbacklight -time 0 -inc 10%')
     end),
 	awful.key({ modkey, "Shift" }, "r",
               function ()

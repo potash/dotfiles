@@ -109,18 +109,4 @@ if ! shopt -oq posix; then
   fi
 fi
 
-export TEXINPUTS=:.:/home/eric/math/tex
-alias gvim='gvim --servername xdvi'
-alias chromium='chromium --incognito'
-
-export PATH=$PATH:$HOME/bin # user binaries
-
-export PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-
-source ~/.rvm/scripts/rvm
-
-bind '"\e[A": history-search-backward'
-bind '"\e[B": history-search-forward'
-
-export PATH=$PATH:$HOME/bin
-
+source ~/.bash_profile
