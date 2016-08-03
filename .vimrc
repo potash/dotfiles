@@ -2,8 +2,7 @@ call pathogen#infect()
 colorscheme zenburn
 :set guioptions-=T  "remove toolbar
 " tab
-set ts=4
-set sw=4
+set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
 
 " syntax highlighting
 syn on
