@@ -92,7 +92,7 @@ XTerm*boldFont:                FONT2
 #endif
 
 XTerm*faceName: DejaVu Sans Mono
-XTerm*faceSize: 11
+XTerm*faceSize: 12
 
 #if defined(COLOR_FG) && defined(COLOR_BG)
 XTerm*background:              COLOR_BG
