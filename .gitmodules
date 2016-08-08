@@ -9,3 +9,6 @@
 [submodule ".vim/bundle/vim-drake-syntax"]
     path = .vim/bundle/vim-drake-syntax
     url = https://bitbucket.org/larsyencken/vim-drake-syntax.git
+[submodule ".config/awesome/apw"]
+	path = .config/awesome/apw
+	url = https://github.com/mokasin/apw.git
