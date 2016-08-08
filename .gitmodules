@@ -1,0 +1,11 @@
+[submodule "VimOrganizer"]
+    path = .vim/bundle/VimOrganizer
+    url = https://github.com/hsitz/VimOrganizer.git
+
+[submodule ".vim/bundle/vim-latex"]
+    path = .vim/bundle/vim-latex
+    url = https://github.com/vim-latex/vim-latex.git
+
+[submodule ".vim/bundle/vim-drake-syntax"]
+    path = .vim/bundle/vim-drake-syntax
+    url = https://bitbucket.org/larsyencken/vim-drake-syntax.git
