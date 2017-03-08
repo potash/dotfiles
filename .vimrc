@@ -15,10 +15,11 @@ set grepprg=grep\ -nH\ $*
 
 let g:Tex_CompileRule_dvi = 'latex -src-specials -interaction=nonstopmode $*'
 let g:Tex_CompileRule_pdf = 'pdflatex -interaction nonstopmode $*'
-let g:Tex_DefaultTargetFormat = 'dvi'
+let g:Tex_DefaultTargetFormat = 'pdf'
 "let g:Tex_FormatDependency_pdf = 'dvi'
 
 let g:Tex_ViewRuleComplete_dvi = 'xdvi -s 8 -keep -editor "gvim --servername xdvi --remote +\%l \%f" $* &'
+let g:Tex_ViewRuleComplete_pdf = 'xpdf $*.pdf* &'
 let g:tex_flavor='latex'
 let g:Tex_UseEditorSettingInDVIViewer = 1
 
