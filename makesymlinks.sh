@@ -8,7 +8,7 @@
 
 dir=~/dotfiles                    # dotfiles directory
 olddir=~/dotfiles_old             # old dotfiles backup directory
-files="offlineimaprc bash_profile vimrc vim config/awesome Xresources zenburn.xrdb muttrc Xsession screenrc"    # list of files/folders to symlink in homedir
+files="bash_profile vimrc vim config/awesome Xresources zenburn.xrdb Xsession screenrc"    # list of files/folders to symlink in homedir
 
 ##########
 
