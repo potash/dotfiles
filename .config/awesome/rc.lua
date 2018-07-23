@@ -310,6 +310,8 @@ globalkeys = awful.util.table.join(
         )
     end),
 	awful.key({ }, "Print", function () awful.util.spawn('import ' .. home .. '/docs/screenshots/' .. os.time() .. '.png') end),
+	awful.key({ modkey }, "F10", function () awful.util.spawn('xdotool click --clearmodifiers 3') end),
+	awful.key({ modkey }, "F5", function () awful.util.spawn('xdotool click --clearmodifiers 2') end),
 	awful.key({ modkey            }, "F3", function ()
 		awful.util.spawn("/bin/sh -c 'xset dpms force off && sleep 2 & slock'")
     end),

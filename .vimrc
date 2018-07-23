@@ -10,13 +10,13 @@ syntax enable
 
 set pastetoggle=<F2>
 
-let g:Tex_GotoError=0
 set grepprg=grep\ -nH\ $*
 
 let g:Tex_CompileRule_dvi = 'latex -src-specials -interaction=nonstopmode $*'
 let g:Tex_CompileRule_pdf = 'pdflatex -interaction nonstopmode $*'
 let g:Tex_DefaultTargetFormat = 'pdf'
-"let g:Tex_FormatDependency_pdf = 'dvi'
+let g:Tex_MultipleCompileFormats='pdf,bibtex,pdf'
+let g:Tex_GotoError=0
 
 let g:Tex_ViewRuleComplete_dvi = 'xdvi -s 8 -keep -editor "gvim --servername xdvi --remote +\%l \%f" $* &'
 let g:Tex_ViewRuleComplete_pdf = 'xpdf $*.pdf* &'
