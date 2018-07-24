@@ -401,7 +401,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "n", awful.client.restore),
 
     -- Prompt
-    awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
+    awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen.index]:run() end),
 
     awful.key({ modkey }, "x",
               function ()
@@ -693,15 +693,15 @@ upicon:set_image(icondir .. "up.png")
 
 local netwidget = wibox.widget.textbox()
 ---- Enable caching
---vicious.enable_caching(vicious.widgets.net)
+vicious.cache(vicious.widgets.net)
 -- Register ethernet widget
 vicious.register(netwidget, vicious.widgets.net,
         function (widget, args)
-                up = args['{eth0 up_kb}'] + 
-				     args['{wlan0 up_kb}']
-                down = args['{eth0 down_kb}'] + 
-				       args['{wlan0 down_kb}']
-                --return string.format('%-3g %3g', args['{eth0 down_kb}'], args['{eth0 up_kb}']) 
+                up = args['{enp0s25 up_kb}'] + 
+				     args['{wlp3s0 up_kb}']
+                down = args['{enp0s25 down_kb}'] + 
+				       args['{wlp3s0 down_kb}']
+               --return string.format('%-3g %3g', args['{eth0 down_kb}'], args['{eth0 up_kb}']) 
                 return string.format('%-3g %3g', down, up)
         end, 3)
 

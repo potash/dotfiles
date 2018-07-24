@@ -6,8 +6,8 @@
 
 ########## Variables
 
-dir=~/dotfiles                    # dotfiles directory
-olddir=~/dotfiles_old             # old dotfiles backup directory
+dir=~/code/dotfiles                    # dotfiles directory
+olddir=~/code/dotfiles_old             # old dotfiles backup directory
 files="bash_profile vimrc vim config/awesome Xresources zenburn.xrdb Xsession screenrc"    # list of files/folders to symlink in homedir
 
 ##########
