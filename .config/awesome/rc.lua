@@ -28,7 +28,7 @@ if awesome.startup_errors then
 end
 
 function notify(s)
-    naughty.notify({text = tostring(s), screen = mouse.screen})
+    naughty.notify({text = tostring(s), screen = mouse.screen.index})
 end
 
 -- Handle runtime errors after startup
@@ -302,7 +302,7 @@ root.buttons(awful.util.table.join(
 globalkeys = awful.util.table.join(
 	awful.key({ }, "XF86Launch1", launcher(terminal .. " -name console", {instance="console"}) ),
 	awful.key({ modkey            }, "F11", function ()
-        awful.prompt.run({ prompt = "Calculate: " }, mypromptbox[mouse.screen].widget,
+        awful.prompt.run({ prompt = "Calculate: " }, mypromptbox[mouse.screen.index].widget,
             function (expr)
                 local result = awful.util.eval("return (" .. expr .. ")")
                 naughty.notify({ text = expr .. " = " .. result, timeout = 10 })
@@ -313,10 +313,7 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey }, "F10", function () awful.util.spawn('xdotool click --clearmodifiers 3') end),
 	awful.key({ modkey }, "F5", function () awful.util.spawn('xdotool click --clearmodifiers 2') end),
 	awful.key({ modkey            }, "F3", function ()
-		awful.util.spawn("/bin/sh -c 'xset dpms force off && sleep 2 & slock'")
-    end),
-	awful.key({ modkey            }, "F4", function ()
-		awful.util.spawn("/bin/sh -c 'slock && pm-suspend'")
+		awful.util.spawn("/bin/sh -c 'physlock -d; TERM=linux setterm -blank 1'")
     end),
 	awful.key({ modkey, "Shift" }, "F7", function ()
         if screen.count() == 2 then

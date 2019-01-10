@@ -1,6 +1,7 @@
 call pathogen#infect()
 colorscheme zenburn
 :set guioptions-=T  "remove toolbar
+set guifont=Monospace\ 14
 " tab
 set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
 
@@ -13,7 +14,7 @@ set pastetoggle=<F2>
 set grepprg=grep\ -nH\ $*
 
 let g:Tex_CompileRule_dvi = 'latex -src-specials -interaction=nonstopmode $*'
-let g:Tex_CompileRule_pdf = 'pdflatex -interaction nonstopmode $*'
+let g:Tex_CompileRule_pdf = 'pdflatex -shell-escape -interaction nonstopmode $*'
 let g:Tex_DefaultTargetFormat = 'pdf'
 let g:Tex_MultipleCompileFormats='pdf,bibtex,pdf'
 let g:Tex_GotoError=0
