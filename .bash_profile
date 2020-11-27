@@ -4,9 +4,9 @@ bind '"\e[B": history-search-forward'
 export TEXINPUTS=.:~/math/tex//:
 alias gvim='gvim --servername xdvi'
 
-export PYTHONPATH=$PYTHONPATH:~
+export PYTHONPATH=$PYTHONPATH:~:~/uchicago/clear-water-stan
 export PATH=~/.local/bin:~/bin:$PATH
-export TERM=xterm-256color
+#export TERM=xterm-256color
 export PAGER="less -S"
 
 # Avoid duplicates

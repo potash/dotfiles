@@ -3,6 +3,7 @@ local gears = require("gears")
 local awful = require("awful")
 awful.rules = require("awful.rules")
 awful.client = require("awful.client")
+awful.placement = require("awful.placement")
 require("awful.autofocus")
 -- Widget and layout library
 local wibox = require("wibox")
@@ -158,7 +159,7 @@ function run_or_raise(cmd, properties, scr)
 	  end 
       return
    end
-   awful.util.spawn(cmd)
+   awful.util.spawn(cmd, {placement=awful.placement.bottom})
 end
 
 -- Returns true if all pairs in table1 are present in table2
@@ -300,7 +301,10 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-	awful.key({ }, "XF86Launch1", launcher(terminal .. " -name console", {instance="console"}) ),
+	awful.key({ }, "XF86Launch1", function () 
+            s= mouse.screen.index
+            run_or_raise(terminal .. " -name console" .. s, {instance="console" .. s}, mouse.screen.index) 
+        end ),
 	awful.key({ modkey            }, "F11", function ()
         awful.prompt.run({ prompt = "Calculate: " }, mypromptbox[mouse.screen.index].widget,
             function (expr)
@@ -313,13 +317,16 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey }, "F10", function () awful.util.spawn('xdotool click --clearmodifiers 3') end),
 	awful.key({ modkey }, "F5", function () awful.util.spawn('xdotool click --clearmodifiers 2') end),
 	awful.key({ modkey            }, "F3", function ()
-		awful.util.spawn("/bin/sh -c 'physlock -d; TERM=linux setterm -blank 1'")
+		awful.util.spawn("systemctl --user start lock")
     end),
+	awful.key({ modkey            }, "F4", function ()
+		awful.util.spawn("systemctl suspend")
+        end),
 	awful.key({ modkey, "Shift" }, "F7", function ()
         if screen.count() == 2 then
 			awful.util.spawn('xrandr --output VGA1 --off')
         else 
-            awful.util.spawn('xrandr --output VGA1 --mode 1440x900 --above LVDS1')
+            awful.util.spawn('xrandr --output VGA1 --mode 1440x900 --right-of LVDS1')
         end
     end),
 	awful.key({ modkey, "" }, "F8", function ()
@@ -518,23 +525,12 @@ awful.rules.rules = {
       properties = modal_properties },
     { rule = { class = "Sonata" },
       properties = modal_properties },
-	{ rule = { instance = "console" },
-      properties = modal_properties, 
-	  callback = function(c) 
-		s = c.screen
-		screengeom = screen[c.screen].workarea
-		height = 200
-		c.hidden = true
-		c:geometry({
-		  	x = 0,
-		  	y = screengeom.height + screengeom.y - height,
-			width = screengeom.width -1,
-			height = height,
-	  	})
-		awful.client.movetoscreen(c,s)
-		c.hidden = false
-		c:raise()
-	  end},
+	{ rule = { instance = "console1" },
+      properties = { ontop = true, above = true, sticky = true, maximized_horizontal=true, height=200, screen=1, placement=awful.placement.bottom_left},
+  callback = function(c) c:geometry({y=screen[1].workarea.height-165}) end},
+	{ rule = { instance = "console2" },
+      properties = { ontop = true, above = true, sticky = true, maximized_horizontal=true, height=200, screen=2, placement=awful.placement.bottom_left},
+  callback = function(c) c:geometry({y=screen[2].workarea.height-165}) end},
     { rule = { instance = "org", class = "Gvim" },
       properties = modal_properties },
 

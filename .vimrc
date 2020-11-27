@@ -3,7 +3,7 @@ colorscheme zenburn
 :set guioptions-=T  "remove toolbar
 set guifont=Monospace\ 14
 " tab
-set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
+set tabstop=4 expandtab shiftwidth=4 smarttab
 
 " syntax highlighting
 syn on
@@ -13,11 +13,13 @@ set pastetoggle=<F2>
 
 set grepprg=grep\ -nH\ $*
 
-let g:Tex_CompileRule_dvi = 'latex -src-specials -interaction=nonstopmode $*'
-let g:Tex_CompileRule_pdf = 'pdflatex -shell-escape -interaction nonstopmode $*'
+"let g:Tex_CompileRule_dvi = 'latex -src-specials -interaction=nonstopmode $*'
+"let g:Tex_CompileRule_pdf = 'pdflatex -shell-escape -interaction nonstopmode $*'
+let g:Tex_CompileRule_pdf = 'arara -v $*'
+
 let g:Tex_DefaultTargetFormat = 'pdf'
-let g:Tex_MultipleCompileFormats='pdf,bibtex,pdf'
-let g:Tex_GotoError=0
+"let g:Tex_MultipleCompileFormats='pdf,biber,pdf'
+"let g:Tex_GotoError=0
 
 let g:Tex_ViewRuleComplete_dvi = 'xdvi -s 8 -keep -editor "gvim --servername xdvi --remote +\%l \%f" $* &'
 let g:Tex_ViewRuleComplete_pdf = 'xpdf $*.pdf* &'
