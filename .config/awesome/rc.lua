@@ -89,7 +89,7 @@ local layouts =
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+    tags[s] = awful.tag({ 1, 2, 3, 4, 5 }, s, layouts[1])
 end
 -- }}}
 
@@ -430,6 +430,8 @@ awful.rules.rules = {
      properties = { floating = true, sticky = true, ontop = true } },
     { rule = { class = "Pavucontrol" },
      properties = { floating = true } },
+    { rule = { class = "Evolution-alarm-notify" },
+     properties = { floating = true } },
     { rule = { class = "feh" },
      properties = { floating = true } },
     { rule = { class = "Display" },
@@ -442,20 +444,10 @@ awful.rules.rules = {
 	  properties = { floating = true} },
 	{rule = {class = "Askpass.tcl"},
 	  properties = { floating = true, ontop = true} },
-	{rule = {class = "Java", name = "Eclipse"},
-	  properties = { floating = true, screen=screen.count()} },
     { rule = { instance = "mutt" },
       properties = modal_properties },
     { rule = { instance = "offlineimap" },
       properties = modal_properties },
-    { rule = { class = "Sonata" },
-      properties = modal_properties },
-	{ rule = { instance = "console1" },
-      properties = { ontop = true, above = true, sticky = true, maximized_horizontal=true, height=200, screen=1, placement=awful.placement.bottom}
-    },
-	{ rule = { instance = "console2" },
-      properties = { ontop = true, above = true, sticky = true, maximized_horizontal=true, height=200, screen=2, placement=awful.placement.bottom}
-    },
     { rule = { instance = "org", class = "Gvim" },
       properties = modal_properties },
 
