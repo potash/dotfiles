@@ -15,6 +15,7 @@ local menubar = require("menubar")
 local vicious = require("vicious")
 local APW = require("apw/widget")
 local cal = require("utils/cal")
+local quake = require("quake")
 
 -- Load Debian menu entries
 require("debian.menu")
@@ -101,90 +102,7 @@ myawesomemenu = {
    { "quit", awesome.quit }
 }
 
--- mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
---                                     { "Debian", debian.menu.Debian_menu.Debian },
---                                    { "open terminal", terminal }
---                                  }
---                         })
-
---- Spawns cmd if no client can be found matching properties
--- If one such client is found, toggle its visibility
--- If multiple found, cycle between them
--- @param cmd the command to execute
--- @param properties a table of properties to match against clients.  Possible entries: any properties of the client object
-function run_or_raise(cmd, properties, scr)
-	local scr = scr or mouse.screen
-	local clients = client.get(scr)
-	local focused = awful.client.next(0)
-	local findex = 0
-	local matched_clients = {}
-	local n = 0
-
-	local s = scr
-
-    for i, c in pairs(client.get(s)) do
-	   --make an array of matched clients
-	   if match(properties, c) then
-		  n = n + 1
-		  matched_clients[n] = c
-		  if c == focused then
-			 findex = n
-		  end
-	   end
-	end
-
-   	if n > 0 then
-      local c = matched_clients[1]
-      -- if the focused window matched switch focus to next in list
-      if 0 < findex and findex < n then
-         c = matched_clients[findex+1]
-      end
-
-	  if c:isvisible() and c == client.focus then
-		c.hidden = true
-	  else
-      	local ctags = c:tags()
-      --if #ctags == 0 then
-         -- ctags is empty, show client on current tag
-         local curtag = awful.tag.selected(scr)
-         awful.client.movetotag(curtag, c)
-      --else
-         -- Otherwise, pop to first tag client is visible on
-      --   awful.tag.viewonly(ctags[1])
-      --end
-      -- And then focus the client
-      	client.focus = c
-		c.hidden = false
-      	c:raise()
-	  end 
-      return
-   end
-   awful.util.spawn(cmd, {placement=awful.placement.bottom})
-end
-
--- Returns true if all pairs in table1 are present in table2
-function match (table1, table2)
-   for k, v in pairs(table1) do
-      if table2[k] ~= v and not table2[k]:find(v) then
-         return false
-      end
-   end
-   return true
-end
-
-function launcher(cmd, props, scr)
-	return function()
-		run_or_raise(cmd, props, scr)
-	end
-end
-
 mymainmenu = awful.menu({ items = { 
-	{ "&mutt", launcher(terminal .. " -cd /home/eric/www/ -name mutt -e mutt",{instance="mutt"}, 1)  },
-	{ "offline&imap", launcher(terminal .. " -name offlineimap -e offlineimap", {instance="offlineimap"}, 1) },
-	{ "&sonata", launcher("sonata", {class="Sonata"}) },
-	{ "&configs", launcher("gvim -name configs -p .config/awesome/rc.lua .Xresources .muttrc", {instance = "configs"}, 1) },
-	{ "&firefox", launcher("iceweasel", {class = "Iceweasel"}) },
-	{ "&org", launcher("gvim -name org -p docs/org/todo.org docs/org/log.org", {instance="org"}, 1) }
 }})
 
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
@@ -206,6 +124,7 @@ mywibox = {}
 mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {}
+myquake = {}
 mytaglist.buttons = awful.util.table.join(
                     awful.button({ }, 1, awful.tag.viewonly),
                     awful.button({ modkey }, 1, awful.client.movetotag),
@@ -288,6 +207,8 @@ for s = 1, screen.count() do
     layout:set_right(right_layout)
 
     mywibox[s]:set_widget(layout)
+
+	myquake[s] = quake({ app = terminal, followtag=true, vert='bottom' })
 end
 -- }}}
 
@@ -301,10 +222,9 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-	awful.key({ }, "XF86Launch1", function () 
-            s= mouse.screen.index
-            run_or_raise(terminal .. " -name console" .. s, {instance="console" .. s}, mouse.screen.index) 
-        end ),
+    -- Dropdown application
+    awful.key({ }, "XF86Launch1", function () myquake[mouse.screen.index]:toggle() end,
+              {description = "dropdown application", group = "launcher"}),
 	awful.key({ modkey            }, "F11", function ()
         awful.prompt.run({ prompt = "Calculate: " }, mypromptbox[mouse.screen.index].widget,
             function (expr)
@@ -314,8 +234,13 @@ globalkeys = awful.util.table.join(
         )
     end),
 	awful.key({ }, "Print", function () awful.util.spawn('import ' .. home .. '/docs/screenshots/' .. os.time() .. '.png') end),
-	awful.key({ modkey }, "F10", function () awful.util.spawn('xdotool click --clearmodifiers 3') end),
-	awful.key({ modkey }, "F5", function () awful.util.spawn('xdotool click --clearmodifiers 2') end),
+    -- these were for faking mouse clicks
+	--awful.key({ modkey }, "F10", function () awful.util.spawn('xdotool click --clearmodifiers 3') end),
+	--awful.key({ modkey }, "F5", function () awful.util.spawn('xdotool click --clearmodifiers 2') end),
+	awful.key({ modkey            }, "F2", function ()
+		awful.util.spawn("xset dpms force suspend")
+    end),
+
 	awful.key({ modkey            }, "F3", function ()
 		awful.util.spawn("systemctl --user start lock")
     end),
@@ -526,11 +451,11 @@ awful.rules.rules = {
     { rule = { class = "Sonata" },
       properties = modal_properties },
 	{ rule = { instance = "console1" },
-      properties = { ontop = true, above = true, sticky = true, maximized_horizontal=true, height=200, screen=1, placement=awful.placement.bottom_left},
-  callback = function(c) c:geometry({y=screen[1].workarea.height-165}) end},
+      properties = { ontop = true, above = true, sticky = true, maximized_horizontal=true, height=200, screen=1, placement=awful.placement.bottom}
+    },
 	{ rule = { instance = "console2" },
-      properties = { ontop = true, above = true, sticky = true, maximized_horizontal=true, height=200, screen=2, placement=awful.placement.bottom_left},
-  callback = function(c) c:geometry({y=screen[2].workarea.height-165}) end},
+      properties = { ontop = true, above = true, sticky = true, maximized_horizontal=true, height=200, screen=2, placement=awful.placement.bottom}
+    },
     { rule = { instance = "org", class = "Gvim" },
       properties = modal_properties },
 
@@ -554,7 +479,7 @@ client.connect_signal("manage", function (c, startup)
         -- awful.client.setslave(c)
 
         -- Put windows in a smart way, only if they does not set an initial position.
-        if not c.size_hints.user_position and not c.size_hints.program_position then
+        if awesome.startup and not c.size_hints.user_position and not c.size_hints.program_position then
             awful.placement.no_overlap(c)
             awful.placement.no_offscreen(c)
         end
